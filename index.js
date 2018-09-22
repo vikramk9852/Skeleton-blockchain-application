@@ -205,10 +205,6 @@ function getDetails(){
 
 }
 
-function getPassword(){
-	alert(contractInstance.userPassword())
-}
-
 function changeContents(){
 	var contents = document.getElementById('changeContents').elements[0].value;
 	contractInstance.changeContents(

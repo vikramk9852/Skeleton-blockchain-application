@@ -4,6 +4,10 @@ var abi = [
 		"constant": false,
 		"inputs": [
 			{
+				"name": "key",
+				"type": "string"
+			},
+			{
 				"name": "contents",
 				"type": "string"
 			}
@@ -52,39 +56,12 @@ var abi = [
 				"type": "string"
 			},
 			{
-				"name": "number",
-				"type": "uint256"
+				"name": "key",
+				"type": "string"
 			}
 		],
 		"name": "getContents",
 		"outputs": [
-			{
-				"name": "",
-				"type": "string"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "username",
-				"type": "string"
-			},
-			{
-				"name": "password",
-				"type": "string"
-			}
-		],
-		"name": "logIn",
-		"outputs": [
-			{
-				"name": "",
-				"type": "string"
-			},
 			{
 				"name": "",
 				"type": "string"
@@ -141,13 +118,17 @@ var abi = [
 	}
 ];
 
-var address = "0x92949873919754086c9e9be580bf740361c4b675";
+var address = "0x7e4b709a322a206ea95e623d8f0f2795fd0a4a1f";
 
 const myContract = web3.eth.contract(abi);
 var contractInstance = myContract.at(address); 
 var counter = 0;
 var userAccount;
-console.log(web3.eth.accounts[0])
+//console.log(web3.eth.accounts[0])
+
+function transfer_register(){
+	location.href="register.html";
+}
 
 function registerUser(){
 	var x = document.getElementById('register')
@@ -156,7 +137,6 @@ function registerUser(){
 	Mob = x.elements[2].value;
 	username = x.elements[3].value;
 	password = x.elements[4].value;
-	alert(web3.eth.accounts[0]);
 	register(Name, Mail, Mob, username, password);
 }
 
@@ -169,16 +149,12 @@ function register(Name, Mail, Mob, username, password){
          },
     	(err, result) => {
 			if(result != null){
-				console.log('success')
+				text = "User "+Name+" registered successfully on Blockchain.";
+				alert(text)
 				counter++;
-				var text = "";		
-				for(let i = 0; i < contractInstance.users(counter).length; i++){
-					text += contractInstance.users(counter)[i] + "<br>";
-				}
-				document.getElementById('firstText').innerHTML = text;
 			}
 			else{
-				console.log('error1')
+				alert(Name);
 			}
 		}
 	)
@@ -206,9 +182,10 @@ function getDetails(){
 }
 
 function changeContents(){
-	var contents = document.getElementById('changeContents').elements[0].value;
+	var key = document.getElementById('changeContents').elements[0].value;
+	var contents = document.getElementById('changeContents').elements[1].value;
 	contractInstance.changeContents(
-		contents,
+		key, contents,
 		{
             gas: 300000,
             from: web3.eth.accounts[0]
@@ -226,8 +203,8 @@ function changeContents(){
 
 function getContents(){
 	var username = document.getElementById('getContents').elements[0].value;
-	var contentNo = document.getElementById('getContents').elements[1].value;
-	contractInstance.getContents(username, contentNo, (err, result) => {
+	var key = document.getElementById('getContents').elements[1].value;
+	contractInstance.getContents(username, key, (err, result) => {
 		if(result != null){
 			console.log(result)
 		}

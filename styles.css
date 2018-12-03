@@ -1,0 +1,10 @@
+input
+ {
+    max-width: 280px;
+}
+body{
+	background: url("background.jpeg");
+	background-size: cover;
+	background-repeat: repeat-y;
+	height: 100vh;
+}

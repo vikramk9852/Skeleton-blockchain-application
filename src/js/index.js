@@ -118,13 +118,13 @@ var abi = [
 	}
 ];
 
-var address = "0x7e4b709a322a206ea95e623d8f0f2795fd0a4a1f";
+var address = "0xd66d8a30ea5d88a7d73109a109a49e20ee3a3f03";
 
 const myContract = web3.eth.contract(abi);
 var contractInstance = myContract.at(address); 
 var counter = 0;
 var userAccount;
-//console.log(web3.eth.accounts[0])
+//console.log(web3.eth.accounts[2])
 
 function transfer_register(){
 	location.href="register.html";
@@ -136,16 +136,16 @@ function registerUser(){
 	Mail = x.elements[1].value;
 	Mob = x.elements[2].value;
 	username = x.elements[3].value;
-	password = x.elements[4].value;
-	register(Name, Mail, Mob, username, password);
+	password = "vikram";
+	register(Name, Mail, Mob, username);
 }
 
-function register(Name, Mail, Mob, username, password){
+function register(Name, Mail, Mob, username){
 	contractInstance.registerUser(
 		Name, Mail, Mob, username, password,
 		{
             gas: 300000,
-            from: web3.eth.accounts[0]
+            from: web3.eth.accounts[2]
          },
     	(err, result) => {
 			if(result != null){
@@ -188,11 +188,11 @@ function changeContents(){
 		key, contents,
 		{
             gas: 300000,
-            from: web3.eth.accounts[0]
+            from: web3.eth.accounts[2]
          },
     	(err, result) => {
 			if(result != null){
-				console.log(result)
+				alert("content "+ contents+ " added successfully")
 			}
 			else{
 				console.log('error')
@@ -206,7 +206,7 @@ function getContents(){
 	var key = document.getElementById('getContents').elements[1].value;
 	contractInstance.getContents(username, key, (err, result) => {
 		if(result != null){
-			console.log(result)
+			alert(result)
 		}
 		else{
 			console.log('error')

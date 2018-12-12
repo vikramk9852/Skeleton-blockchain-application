@@ -7,6 +7,8 @@ contract userAccount{
         string mob_no;
         string username;
         string[] contents;
+        mapping(string => bool) uniqueKey;
+        mapping(string => uint) keyToContent;
     }
     bool success = false;
     User[] public users;
@@ -37,6 +39,16 @@ contract userAccount{
         _;
     }
     
+    modifier existKey(string key){
+        require(users[addressToAccount[msg.sender]].uniqueKey[key] == false);
+        _;
+    }
+    
+    modifier checkKey(string user, string key){
+        require(users[usernameToAccount[user]].uniqueKey[key] == true);
+        _;
+    }
+    
     function registerUser(string name, string email_id, string mob_no, string username, string password) public existUsename(username) existAddress() existemail(email_id){
         address password1 = address(keccak256(password));
         string[] arr;
@@ -53,11 +65,13 @@ contract userAccount{
         return users.length;
     }
     
-    function changeContents(string contents) public {
-        users[addressToAccount[msg.sender]].contents.push(contents)-1;
+    function changeContents(string key, string contents) public existKey(key){
+        users[addressToAccount[msg.sender]].uniqueKey[key] = true;
+        users[addressToAccount[msg.sender]].contents.push(contents);
+        users[addressToAccount[msg.sender]].keyToContent[key] = users[addressToAccount[msg.sender]].contents.length-1;
     }
     
-    function getContents(string user, uint number) public view returns(string){
-        return users[usernameToAccount[user]].contents[number];
+    function getContents(string user, string key) public checkKey(user, key) view returns(string){
+        return users[usernameToAccount[user]].contents[users[usernameToAccount[user]].keyToContent[key]];
     }
 }
